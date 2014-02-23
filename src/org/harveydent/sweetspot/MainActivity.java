@@ -18,6 +18,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private boolean mInitialized;
+    private Beep beep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        beep = new Beep(getApplicationContext());
     }
 
     @Override
@@ -50,7 +52,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             tvX.setText(Float.toString(x));
             tvY.setText(Float.toString(y));
             tvZ.setText(Float.toString(z));
-            
+            beep.playBeep(1.0f);
             if (Utils.getMagnitudeDifference(x, y, z, target_x, target_y, target_z) < THRESHOLD) {
                 ssAchieved.setText("Sweet spot achieved!");
             } else {
