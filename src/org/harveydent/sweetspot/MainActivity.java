@@ -4,6 +4,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.app.Activity;
@@ -16,23 +18,24 @@ public class MainActivity extends Activity implements SensorEventListener {
     private static double target_y = 0;
     private static double target_z = 0;
     
+    private SoundPool mSoundPool;
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private boolean mInitialized;
     private VC vc;
-    private Beep beep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mInitialized = false;
+		mSoundPool  = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         
         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        vc = new VC(v, new Beep(getApplicationContext()));
+        vc = new VC(v, new Beep(getApplicationContext(), mSoundPool));
         vc.vibrate();
     }
 

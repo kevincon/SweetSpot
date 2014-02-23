@@ -28,7 +28,7 @@ public class VC extends Activity {
     	pattern  = new long[2];
     	setOnSpeed(ON_DURATION_SLOW);
     	setOffSpeed(SLOWEST);
-    	beep = beep;
+    	this.beep = beep;
     }
     
     private void setOnSpeed(long os)
