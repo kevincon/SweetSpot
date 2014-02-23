@@ -36,6 +36,14 @@ public class Beep {
 		// beep is higher priority than music
 		soundpool.play(beepSoundId, volume, volume, 0, 0, 1.0f);
 	}
+	
+	public void kill()
+	{
+		if ( this.currentTimer != null )
+		{
+			currentTimer.cancel();
+		}
+	}
 
 	/**
 	 * 
@@ -43,10 +51,7 @@ public class Beep {
 	 */
 	public void setSpeed(long l) {
 		Timer newTimer = new Timer();
-		if ( this.currentTimer != null )
-		{
-			currentTimer.cancel();
-		}
+		kill();
 		newTimer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
 	        	playBeep(1.0f);

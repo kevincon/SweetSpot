@@ -1,23 +1,15 @@
 package org.harveydent.sweetspot;
 
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Bundle;
+
 import android.os.Vibrator;
 import android.app.Activity;
-import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class VC extends Activity {
 	
 	private Vibrator v;
 	private long[] pattern; // Array of size 2, 0 = off speed, 1 = on speed
 	private static final long FASTEST = 5;
-	private static final long SLOWEST = 1500;
+	private static final long SLOWEST = 900;
 	private static final long ON_DURATION_SLOW = 80;
 	private static final long ON_DURATION_FAST = 130;
 	private Beep beep;
@@ -47,6 +39,7 @@ public class VC extends Activity {
     	if (speed <= 500) {
     		setOnSpeed(ON_DURATION_FAST);
     	}
+    	this.stop();
     	this.vibrate();
     }
     
@@ -59,9 +52,15 @@ public class VC extends Activity {
     	v.vibrate(pattern, 0);
     }
     
+    public void win()
+    {
+    	beep.kill();
+    }
+    
     public void stop()
     {
     	v.cancel();
+    	beep.kill();
     }
     
     /*
