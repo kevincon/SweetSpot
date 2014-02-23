@@ -37,6 +37,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     TextView tvY;
     TextView tvZ;
     TextView ssAchieved;
+    TextView tvScore;
     
     private void setNewTargets()
     {
@@ -59,6 +60,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         tvX= (TextView)findViewById(R.id.x_axis);
         tvY= (TextView)findViewById(R.id.y_axis);
         tvZ= (TextView)findViewById(R.id.z_axis);
+        tvScore= (TextView)findViewById(R.id.score);
         ssAchieved = (TextView)findViewById(R.id.SweetSpotAchievedTextView);
         
         tvX.setText("0.0");
@@ -109,6 +111,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     		reachedSweetSpot = true;
 			vc.win();
 			fanfare.play(1.0f);
+			Score.updateScore();
 			setNewTargets();
     	} else {
     		reachedSweetSpot = false;
@@ -129,6 +132,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     			{
     				ssAchieved.setText("");
     			}
+    			tvScore.setText(Long.toString(Score.getCurrentScore()));
     		}
     	});
     }

@@ -39,6 +39,10 @@ public class VC extends Activity {
     	if (speed <= 500) {
     		setOnSpeed(ON_DURATION_FAST);
     	}
+    	else
+    	{
+    		setOnSpeed(ON_DURATION_SLOW);
+    	}
     	this.stop();
     	this.vibrate();
     }
