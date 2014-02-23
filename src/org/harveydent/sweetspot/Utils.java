@@ -24,14 +24,15 @@ public class Utils {
     
     public static float[] generateRandomSweetSpot()
     {
-    	final float MAGNITUDE  = 7.0f;
+    	final float ACCEPTABLE_RANGE = 2.0f;
+    	final float GRAVITY = 9.8f;
     	Random r = new Random();
     	float[] val = new float[3];
     	do {
-    	val[0] = r.nextFloat()*MAGNITUDE * (r.nextBoolean() ? 1.0f : -1.0f);
-    	val[1] = r.nextFloat()*MAGNITUDE * (r.nextBoolean() ? 1.0f : -1.0f);
-    	val[2] = r.nextFloat()*MAGNITUDE * (r.nextBoolean() ? 1.0f : -1.0f);
-    	} while (Math.sqrt( Math.pow(val[0], 2)+Math.pow(val[1], 2)+Math.pow(val[2],2) ) > MAGNITUDE);
+    	val[0] = r.nextFloat()*GRAVITY * (r.nextBoolean() ? 1.0f : -1.0f);
+    	val[1] = r.nextFloat()*GRAVITY * (r.nextBoolean() ? 1.0f : -1.0f);
+    	val[2] = r.nextFloat()*GRAVITY * (r.nextBoolean() ? 1.0f : -1.0f);
+    	} while (Math.abs(Math.sqrt( Math.pow(val[0], 2)+Math.pow(val[1], 2)+Math.pow(val[2],2) ) - GRAVITY) > ACCEPTABLE_RANGE);
     	// BEST CODE EVAR
 		return val;
     }

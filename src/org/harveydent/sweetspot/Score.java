@@ -28,7 +28,7 @@ public class Score {
 	{
 		endDate = getDateTime();
 		long elapsed = endDate.getTime() - startDate.getTime();
-		long elapsedSec = elapsed / 60;
+		long elapsedSec = elapsed / 1000;
 		if (elapsedSec <= 10) {
 			currentScore += 200;
 		}

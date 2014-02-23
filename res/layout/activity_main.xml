@@ -75,6 +75,14 @@
     </TableLayout>
 
     <TextView
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.55"
+        android:gravity="center"
+        android:textSize="50px" />
+        
+    <TextView
         android:id="@+id/SweetSpotAchievedTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

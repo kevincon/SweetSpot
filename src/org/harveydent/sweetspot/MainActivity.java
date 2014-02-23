@@ -33,11 +33,14 @@ public class MainActivity extends Activity implements SensorEventListener {
     private VC vc;
     private Fanfare fanfare;
     
+    private Timeout timeout;
+    
     TextView tvX;
     TextView tvY;
     TextView tvZ;
     TextView ssAchieved;
     TextView tvScore;
+    TextView tvTimer;
     
     private void setNewTargets()
     {
@@ -61,6 +64,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         tvY= (TextView)findViewById(R.id.y_axis);
         tvZ= (TextView)findViewById(R.id.z_axis);
         tvScore= (TextView)findViewById(R.id.score);
+        tvTimer = (TextView)findViewById(R.id.timer);
         ssAchieved = (TextView)findViewById(R.id.SweetSpotAchievedTextView);
         
         tvX.setText("0.0");
@@ -80,6 +84,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         vc.vibrate();
         
 		Timer newTimer = new Timer();
+		timeout = new Timeout();
 		newTimer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
 	        	gameLoop();
@@ -99,11 +104,16 @@ public class MainActivity extends Activity implements SensorEventListener {
     
     void gameLoop()
     {
+   		if (timeout.getValue() < 0)
+		{
+			return;
+		}
         final boolean reachedSweetSpot;
         long slowest = vc.getSpeedRange()[0];
         long fastest = vc.getSpeedRange()[1];
         float magnitude_diff = (float)Utils.getMagnitudeDifference(current_x, current_y, current_z, target_x, target_y, target_z);
         float speed = (long)Utils.magnitudeDifferenceToSpeed(magnitude_diff, slowest, fastest);
+        
         Log.i("Main", Float.toString(speed));
         vc.setSpeed((long)speed);
 
@@ -113,16 +123,30 @@ public class MainActivity extends Activity implements SensorEventListener {
 			fanfare.play(1.0f);
 			Score.updateScore();
 			setNewTargets();
+			//timeout = new Timeout();
     	} else {
     		reachedSweetSpot = false;
-    	}
 
+    		if (timeout.getValue() <= 0)
+    		{
+    			vc.stop();
+    		}
+    	}
+    	
     	runOnUiThread(new Runnable() {
     		@Override
     		public void run() {
     			tvX.setText(Float.toString(current_x));
     			tvY.setText(Float.toString(current_y));
     			tvZ.setText(Float.toString(current_z));           //stuff that updates ui
+    			if ( timeout.getValue() <= 0 )
+    			{
+    				tvTimer.setText("GAME OVER");
+    			}
+    			else
+    			{    		
+    				tvTimer.setText(Integer.toString(timeout.getValue()));
+    			}
 
     			if ( reachedSweetSpot )
     			{
