@@ -2,9 +2,8 @@ package org.harveydent.sweetspot;
 
 
 import android.os.Vibrator;
-import android.app.Activity;
 
-public class VC extends Activity {
+public class VC {
 	
 	private Vibrator v;
 	private long[] pattern; // Array of size 2, 0 = off speed, 1 = on speed
@@ -89,37 +88,3 @@ public class VC extends Activity {
     }
     
 }
-
-
-/*
-Thread t = new Thread() {
-@Override
-public void run() {
-	Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-	for (int i=20; i >= 1; i--) {
-    	long[] pattern = new long[2];
-    	pattern[0] = i;
-    	pattern[1] = 50;
-    	v.vibrate(pattern, 0);
-		try {
-			synchronized (this) {
-				wait (1000);	
-			}
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		v.cancel();
-		try {
-			synchronized (this) {
-				wait (500);	
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-}
-};
-
-t.run();
-*/

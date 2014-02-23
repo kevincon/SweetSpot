@@ -17,7 +17,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements SensorEventListener {
+public class SweetSpot extends Activity implements SensorEventListener {
     private final static float THRESHOLD = 4.0f;
     private static float target_x;
     private static float target_y;
@@ -34,6 +34,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private Fanfare fanfare;
     
     private Timeout timeout;
+    private Timer gameTimer;
     
     TextView tvX;
     TextView tvY;
@@ -70,9 +71,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         tvX.setText("0.0");
         tvY.setText("0.0");
         tvZ.setText("0.0");
-        
-        setNewTargets();
-        
+             
 		mSoundPool  = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
@@ -81,15 +80,30 @@ public class MainActivity extends Activity implements SensorEventListener {
         
         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         vc = new VC(v, new Beep(getApplicationContext(), mSoundPool));
+    }
+    
+    @Override
+    public void onResume()
+    {
+    	super.onResume();
+        setNewTargets();
         vc.vibrate();
-        
-		Timer newTimer = new Timer();
+            
+		gameTimer = new Timer();
 		timeout = new Timeout();
-		newTimer.scheduleAtFixedRate(new TimerTask() {
+		gameTimer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
 	        	gameLoop();
 	        }
 		}, 0, 901);	
+    }
+    
+    @Override
+    public void onPause()
+    {
+    	super.onPause();
+    	vc.stop();
+    	gameTimer.cancel();
     }
 
     @Override
