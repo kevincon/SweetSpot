@@ -47,6 +47,7 @@ public class VC extends Activity {
     	if (speed <= 500) {
     		setOnSpeed(ON_DURATION_FAST);
     	}
+    	beep.setSpeed(pattern[0]+pattern[1]);
     }
     
     /*
@@ -54,7 +55,7 @@ public class VC extends Activity {
      */
     public void vibrate()
     {
-        //beep.playBeep(1.0f);
+    	beep.setSpeed(pattern[0]+pattern[1]);
     	v.vibrate(pattern, 0);
     }
     
