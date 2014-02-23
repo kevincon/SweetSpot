@@ -14,13 +14,14 @@ import android.os.Vibrator;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements SensorEventListener {
-    private final static double THRESHOLD = 4.00;
-    private static float target_x = 7;
-    private static float target_y = 2;
-    private static float target_z = -2;
+    private final static float THRESHOLD = 4.0f;
+    private static float target_x;
+    private static float target_y;
+    private static float target_z;
     
     private static float current_x = 0;
     private static float current_y = 0;
@@ -36,11 +37,24 @@ public class MainActivity extends Activity implements SensorEventListener {
     TextView tvY;
     TextView tvZ;
     TextView ssAchieved;
+    
+    private void setNewTargets()
+    {
+        float targets[] = Utils.generateRandomSweetSpot();
+        target_x = targets[0];
+        target_y = targets[1];
+        target_z = targets[2];
+        Log.i("Main", "Targets:");
+        Log.i("Main", Float.toString(target_x));
+        Log.i("Main", Float.toString(target_y));
+        Log.i("Main", Float.toString(target_z));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         
         tvX= (TextView)findViewById(R.id.x_axis);
         tvY= (TextView)findViewById(R.id.y_axis);
@@ -50,6 +64,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         tvX.setText("0.0");
         tvY.setText("0.0");
         tvZ.setText("0.0");
+        
+        setNewTargets();
         
 		mSoundPool  = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -84,13 +100,16 @@ public class MainActivity extends Activity implements SensorEventListener {
         final boolean reachedSweetSpot;
         long slowest = vc.getSpeedRange()[0];
         long fastest = vc.getSpeedRange()[1];
-        double magnitude_diff = Utils.getMagnitudeDifference(current_x, current_y, current_z, target_x, target_y, target_z);
-        double speed = (long)Utils.magnitudeDifferenceToSpeed(magnitude_diff, slowest, fastest);
-        Log.i("Main", Double.toString(speed));
+        float magnitude_diff = (float)Utils.getMagnitudeDifference(current_x, current_y, current_z, target_x, target_y, target_z);
+        float speed = (long)Utils.magnitudeDifferenceToSpeed(magnitude_diff, slowest, fastest);
+        Log.i("Main", Float.toString(speed));
         vc.setSpeed((long)speed);
 
     	if ( magnitude_diff < THRESHOLD) {
     		reachedSweetSpot = true;
+			vc.win();
+			fanfare.play(1.0f);
+			setNewTargets();
     	} else {
     		reachedSweetSpot = false;
     	}
@@ -105,8 +124,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     			if ( reachedSweetSpot )
     			{
     				ssAchieved.setText("Sweet spot achieved!");
-    				vc.win();
-    				fanfare.play(1.0f);
     			}
     			else
     			{

@@ -24,8 +24,15 @@ public class Utils {
     
     public static float[] generateRandomSweetSpot()
     {
+    	final float MAGNITUDE  = 7.0f;
     	Random r = new Random();
-    	float random_x = r.nextFloat();
-		return null;
+    	float[] val = new float[3];
+    	do {
+    	val[0] = r.nextFloat()*MAGNITUDE * (r.nextBoolean() ? 1.0f : -1.0f);
+    	val[1] = r.nextFloat()*MAGNITUDE * (r.nextBoolean() ? 1.0f : -1.0f);
+    	val[2] = r.nextFloat()*MAGNITUDE * (r.nextBoolean() ? 1.0f : -1.0f);
+    	} while (Math.sqrt( Math.pow(val[0], 2)+Math.pow(val[1], 2)+Math.pow(val[2],2) ) > MAGNITUDE);
+    	// BEST CODE EVAR
+		return val;
     }
 }
